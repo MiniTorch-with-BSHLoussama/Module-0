@@ -5,6 +5,36 @@ build-backend = "hatchling.build"
 [project]
 name = "minitorch"
 version = "0.5"
+description = "A minimal deep learning library for educational purposes"
+requires-python = ">=3.8"
+dependencies = [
+    "colorama==0.4.6",
+    "hypothesis==6.138.2",
+    "numba==0.61.2",
+    "numpy>=1.24,<2.3",
+    "pytest==8.4.1",
+    "pytest-env==1.1.5",
+    "pytest-runner==6.0.1",
+    "typing_extensions",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pre-commit==4.3.0",
+]
+extra = [
+    "datasets==2.4.0",
+    "embeddings==0.0.8",
+    "plotly==6.3.0",
+    "pydot==1.4.1",
+    "python-mnist",
+    "streamlit==1.48.1",
+    "streamlit-ace",
+    "torch==2.8.0",
+    "watchdog==1.0.2",
+    "altair==5.5.0",
+    "networkx==3.5",
+]
 
 [tool.pyright]
 include = ["**/minitorch"]
@@ -61,7 +91,6 @@ markers = [
     "task4_4",
 ]
 [tool.ruff]
-
 exclude = [
     ".git",
     "__pycache__",
@@ -74,8 +103,8 @@ exclude = [
     "**/docs/**/*",
 ]
 
+[tool.ruff.lint]
 ignore = [
-    "ANN101",
     "ANN401",
     "N801",
     "E203",
@@ -96,7 +125,7 @@ ignore = [
     "D107",
     "D213",
     "ANN204",
-    "ANN102",
+    "D203"
 ]
 select = ["D", "E", "F", "N", "ANN"]
 fixable = [
@@ -147,5 +176,5 @@ fixable = [
 ]
 unfixable = []
 
-[tool.ruff.extend-per-file-ignores]
+[tool.ruff.lint.extend-per-file-ignores]
 "tests/**/*.py" = ["D"]
