@@ -24,7 +24,7 @@ We highly recommend setting up a *virtual environment*. The virtual environment 
 
 **Option 1: Anaconda (Recommended)**
 ```bash
->>> conda create --name minitorch python    # Run only once
+>>> conda create --name minitorch python=3.11    # Run only once
 >>> conda activate minitorch
 >>> conda install llvmlite                  # For optimization
 ```
@@ -52,6 +52,8 @@ Install all packages in your virtual environment:
 
 ```bash
 >>> python -m pip install -e ".[dev]"
+>>> python -m pip install -r requirements.extra.txt
+>>> python -m pip install -Ue .
 ```
 
 ## Verification
