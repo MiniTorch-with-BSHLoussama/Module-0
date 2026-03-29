@@ -1,3 +1,9 @@
+import os, sys
+for _p in sys.path:
+    _tlib = os.path.join(_p, "torch", "lib")
+    if os.path.exists(_tlib):
+        os.add_dll_directory(_tlib)
+        break
 import torch
 
 import minitorch
