@@ -17,10 +17,10 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
 
     - name: Set up Python
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v6
       with:
         python-version: '3.11'
         cache: 'pip'
@@ -42,36 +42,46 @@ jobs:
       continue-on-error: true
 
     - name: Task 0.1
-      id: task-0-1
+      id: task_0_1
       run: pytest -m task0_1 --tb=short
       timeout-minutes: 10
       continue-on-error: false
 
     - name: Task 0.2
-      id: task-0-2
+      id: task_0_2
       run: pytest -m task0_2 --tb=short
       timeout-minutes: 10
       continue-on-error: false
 
     - name: Task 0.3
-      id: task-0-3
+      id: task_0_3
       run: pytest -m task0_3 --tb=short
       timeout-minutes: 10
       continue-on-error: false
 
     - name: Task 0.4
-      id: task-0-4
+      id: task_0_4
       run: pytest -m task0_4 --tb=short
       timeout-minutes: 10
       continue-on-error: false
 
     - name: Autograding Reporter
-      uses: classroom-resources/autograding-grading-reporter@v1
-      env:
-        SETUP_RESULTS: "${{steps.setup.outcome}}"
-        TASK-0-1_RESULTS: "${{steps.task-0-1.outcome}}"
-        TASK-0-2_RESULTS: "${{steps.task-0-2.outcome}}"
-        TASK-0-3_RESULTS: "${{steps.task-0-3.outcome}}"
-        TASK-0-4_RESULTS: "${{steps.task-0-4.outcome}}"
-      with:
-        runners: setup,task-0-1,task-0-2,task-0-3,task-0-4
+      if: always()
+      run: |
+        echo "### Autograding Results" >> $GITHUB_STEP_SUMMARY
+        echo "| Task | Result |" >> $GITHUB_STEP_SUMMARY
+        echo "|------|--------|" >> $GITHUB_STEP_SUMMARY
+        echo "| Setup (flake8) | ${{ steps.setup.outcome }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| Task 0.1 | ${{ steps.task_0_1.outcome }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| Task 0.2 | ${{ steps.task_0_2.outcome }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| Task 0.3 | ${{ steps.task_0_3.outcome }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| Task 0.4 | ${{ steps.task_0_4.outcome }} |" >> $GITHUB_STEP_SUMMARY
+
+        if [[ "${{ steps.setup.outcome }}" != "success" || \
+              "${{ steps.task_0_1.outcome }}" != "success" || \
+              "${{ steps.task_0_2.outcome }}" != "success" || \
+              "${{ steps.task_0_3.outcome }}" != "success" || \
+              "${{ steps.task_0_4.outcome }}" != "success" ]]; then
+          echo "One or more tasks failed."
+          exit 1
+        fi
